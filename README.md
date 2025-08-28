@@ -20,17 +20,92 @@ alphabet shifted cyclically to the left compared to the previous alphabet, corre
 ## ALGORITHM:
 
 STEP-1: Arrange the alphabets in row and column of a 26*26 matrix.
+
 STEP-2: Circulate the alphabets in each row to position left such that the first letter is attached to last.
+
 STEP-3: Repeat this process for all 26 rows and construct the final key matrix.
+
 STEP-4: The keyword and the plain text is read from the user.
+
 STEP-5: The characters in the keyword are repeated sequentially so as to match with that of the plain text.
+
 STEP-6: Pick the first letter of the plain text and that of the keyword as the row indices and column indices respectively.
+
 STEP-7: The junction character where these two meet forms the cipher character.
+
 STEP-8: Repeat the above steps to generate the entire cipher text.
 
 
 ## PROGRAM
 
+```c
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+void vigenereEncrypt(char *text, const char *key) {
+    int textLen = strlen(text);
+    int keyLen = strlen(key);
+    int j = 0;
+
+    for (int i = 0; i < textLen; i++) {
+        char c = text[i];
+        if (isalpha(c)) {  
+            int base = isupper(c) ? 'A' : 'a';
+            int k = toupper(key[j % keyLen]) - 'A';
+            text[i] = (char)(((c - base + k) % 26) + base);
+            j++;
+        }
+    }
+}
+
+// Function to perform Vigenere decryption
+void vigenereDecrypt(char *text, const char *key) {
+    int textLen = strlen(text);
+    int keyLen = strlen(key);
+    int j = 0;
+
+    for (int i = 0; i < textLen; i++) {
+        char c = text[i];
+        if (isalpha(c)) {
+            int base = isupper(c) ? 'A' : 'a';
+            int k = toupper(key[j % keyLen]) - 'A';
+            text[i] = (char)(((c - base - k + 26) % 26) + base);
+            j++;
+        }
+    }
+}
+
+int main() {
+    char key[100];
+    char message[200];
+
+    printf("Enter your secret message: ");
+    fgets(message, sizeof(message), stdin);
+    message[strcspn(message, "\n")] = '\0'; 
+
+    printf("Enter the key: ");
+    fgets(key, sizeof(key), stdin);
+    key[strcspn(key, "\n")] = '\0';           
+
+    vigenereEncrypt(message, key);
+    printf("Encrypted Message: %s\n", message);
+
+    vigenereDecrypt(message, key);
+    printf("Decrypted Message: %s\n", message);
+
+    return 0;
+}
+
+```
+
+## DEVELOPED BY: SUDHARSANAN U
+## REGISTER NO : 212224230276
+
 ## OUTPUT
 
+<img width="339" height="126" alt="image" src="https://github.com/user-attachments/assets/3a879b89-a108-417a-a3ad-f6325ee243b0" />
+
 ## RESULT
+
+Thus the successfully implement the Vigenere Cipher substitution technique using C program.
